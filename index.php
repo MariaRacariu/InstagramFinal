@@ -12,6 +12,16 @@ $stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL FROM photos");
 //run sql string after prepare
 $stmtFetchPhotos->execute();
 ?>
+<?php //Search
+  if (isset($_POST["search"])) {
+    require "2-search.php";
+
+    if (count($results) > 0) { foreach ($results as $r) {
+       //"The format string" består av noll eller fler direktiv: vanliga tecken (exklusive %) som kopieras direkt till resultat- och konverteringsspecifikationerna, som var och en resulterar i att en egen parameter hämtas.
+      printf("<div> %s </div>", $r["username"]);
+      }} else { echo "No results found"; }
+    }
+?>
 
 
 <!DOCTYPE html>
@@ -36,13 +46,17 @@ $stmtFetchPhotos->execute();
     <nav class="navbar">
       <div class="nav-wrapper" class="dropdown">
         <a href="index.php"><img src="img/instagram-logga.png" class="insta-img" alt="" /></a>
-        <input type="text" class="search" placeholder="Sök" />
+        <!-- Search -->
+        <form class="search" method="post" action="index.php">
+          <input   type="text"placeholder="sök" name="search" required/>
+          <input class="mitt" type="submit" value="->"/>
+        </form>
         <div class="navigering-items">
           <div class="ikon">
             <i class="fas fa-home"></i>
           </div>
           <div class="ikon">
-            <a class="utan" href="post.php"><i class="far fa-plus-square"></i></a>
+            <a class="utan" href="upload.php"><i class="far fa-plus-square"></i></a>
           </div>
           <div class="ikon">
             <i class="far fa-paper-plane"></i>
