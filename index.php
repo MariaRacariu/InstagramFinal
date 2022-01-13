@@ -12,6 +12,7 @@ $stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL FROM photos");
 //run sql string after prepare
 $stmtFetchPhotos->execute();
 ?>
+
 <?php //Search
   if (isset($_POST["search"])) {
     require "2-search.php";
@@ -235,11 +236,11 @@ $stmtFetchPhotos->execute();
     </section>
 
 
-    <form method="post" action="index.php">
+    <!-- <form method="post" action="index.php">
       <h1>SEARCH FOR USERS</h1>
       <input type="text" name="search" required/>
       <input type="submit" value="Search"/>
-    </form>
+    </form> -->
     <?php
     // (B) PROCESS SEARCH WHEN FORM SUBMITTED
     if (isset($_POST["search"])) {
