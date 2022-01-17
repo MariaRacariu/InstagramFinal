@@ -2,9 +2,8 @@
 require 'dbh.php'; //require connection script
 
 if(isset($_POST['submit'])){  
-        
-        $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
-        $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
+    $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $username = !empty($_POST['username']) ? trim($_POST['username']) : null;
     $passwordAttempt = !empty($_POST['password']) ? trim($_POST['password']) : null;
@@ -18,29 +17,20 @@ if(isset($_POST['submit'])){
     
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
-   
     if($user === false){
-       echo '<script>alert("invalid username or password")</script>';
+        echo '<script>alert("invalid username or password")</script>';
     } else{
-         
-        
         $validPassword = password_verify($passwordAttempt, $user['password']);
-        
-        
         if($validPassword){
-            
-            
-             
             $_SESSION['users'] = $username;
-           echo '<script>window.location.replace("index.php");</script>';
+            echo '<script>window.location.replace("index.php");</script>';
             exit;
-            
         } else{
             //$validPassword was FALSE. Passwords do not match.
             echo '<script>alert("invalid username or password")</script>';
         }
     }
-    }
+}
 ?>
 
 
@@ -49,37 +39,27 @@ if(isset($_POST['submit'])){
 <html lang="en">
 <head>
 <link rel="stylesheet" href="css/style.css">
-
     <meta charset="UTF-8">
-    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
 
-
-    
 <form class="zen" action="signin.php" method="post">     
-
-  <div class="signup-row">  
-    <div class="row-1">
-      <input type="text" name="username" placeholder="Username">
-    </div>             
-    
-    <div class="row-1">
-      <input type="password" name="password" placeholder="Password">    
+    <div class="signup-row">  
+        <div class="row-1">
+            <input type="text" name="username" placeholder="Username">
+        </div>             
+        <div class="row-1">
+            <input type="password" name="password" placeholder="Password">    
+        </div>
+        <div class="row-1">
+            <button name="submit" type="submit">logga in</button>
+        </div>  
     </div>
-    <div class="row-1">
-      <button name="submit" type="submit">logga in</button>
-    </div>  
-  </div>
- </form>
-
- <a href="Signup.php">sign up hääääääääääääär</a>
-
- 
-
+</form>
+<a href="Signup.php">sign up hääääääääääääär</a>
 </body>
 </html>
 

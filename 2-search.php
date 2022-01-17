@@ -12,8 +12,8 @@ try {
     echo "Woho!";
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
-  }
-  
+}
+
 $stmt = $pdo->prepare("SELECT * FROM `users` WHERE `username` LIKE ? OR `email` LIKE ?");
 $stmt->execute(["%".$_POST["search"]."%", "%".$_POST["search"]."%"]);
 $results = $stmt->fetchAll();
