@@ -7,8 +7,7 @@ $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //--------------- SELECT PHOTOS --------------- \\
 //pdo prepare sql string to select images from photos table
-$stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL FROM photos");
-
+$stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL, caption FROM photos");
 //run sql string after prepare
 $stmtFetchPhotos->execute();
 ?>
@@ -135,6 +134,9 @@ $stmtFetchPhotos->execute();
                 <div class="options">
                   <i class="fas fa-ellipsis-h"></i>
                 </div>
+              </div>
+              <div>
+                <p><?= $rowPhotos['caption'] ?></p>
               </div>
               <img src="<?= $rowPhotos['URL']; ?>" class="post-image" alt="unknown" />
               <div class="post-content">

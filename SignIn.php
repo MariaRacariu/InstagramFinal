@@ -22,7 +22,9 @@ if(isset($_POST['submit'])){
     } else{
         $validPassword = password_verify($passwordAttempt, $user['password']);
         if($validPassword){
+            session_start();
             $_SESSION['users'] = $username;
+            $_SESSION['user_id'] = $user['user_id'];
             echo '<script>window.location.replace("index.php");</script>';
             exit;
         } else{
