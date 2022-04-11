@@ -2,7 +2,7 @@
 $host = 'localhost';
 $db = 'instagramdatabase';
 $user = 'root';
-$password = 'root';
+$password = '';
 $dsn = '';
 
 try {
