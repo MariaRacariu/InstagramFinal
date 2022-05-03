@@ -1,32 +1,33 @@
 <?php
 include "comments.php";
 require "dbh.php";
+// include "search.php";
+
+session_start();
+$user_id = $_SESSION['user_id'];
 
 $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
 $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //--------------- SELECT PHOTOS --------------- \\
 //pdo prepare sql string to select images from photos table
-$stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL, caption FROM photos ORDER BY photos_time DESC");
+$stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL, caption, user_id FROM photos ORDER BY photos_time DESC");
 //run sql string after prepare
 $stmtFetchPhotos->execute();
-?>
 
-<?php //Search
+
 if (isset($_POST["search"])) {
-  require "2-search.php";
-
+  require "search.php"; //renamed 2-search to search.
   if (count($results) > 0) {
     foreach ($results as $r) {
-      //"The format string" består av noll eller fler direktiv: vanliga tecken (exklusive %) som kopieras direkt till resultat- och konverteringsspecifikationerna, som var och en resulterar i att en egen parameter hämtas.
       printf("<div> %s </div>", $r["username"]);
     }
   } else {
     echo "No results found";
   }
 }
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +38,6 @@ if (isset($_POST["search"])) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <!-- <link rel="stylesheet" href="css/login.style.css" /> -->
 
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -52,12 +52,13 @@ if (isset($_POST["search"])) {
 
 
     <div class="nav-wrapper" class="dropdown">
-      <a href="index.php"><img src="img/instagram-logga.png" class="insta-img" alt="" /></a>
+      <a href="index.php"><img src="img/instagram-logga.png" class="insta-img" alt=""></a>
+
       <!-- Search -->
-      <!-- <form class="search" method="post" action="index.php">
-          <input   type="text"placeholder="sök" name="search" required/>
-          <input class="mitt" type="submit" value="->"/>
-        </form> -->
+      <form class="search" method="post" action="index.php">
+        <input type="text" placeholder="search" name="search" required>
+        <input type="submit" value="Search"> <!-- Removed useless class and changed value to Search. -->
+      </form>
 
 
       <div class="navigering-items">
@@ -103,7 +104,7 @@ if (isset($_POST["search"])) {
       //Repeat for each row found from sql above
       while ($rowPhotos = $stmtFetchPhotos->fetch()) {
         $photos_id = $rowPhotos['photos_id'];
-      ?>
+        ?>
 
         <div class="post">
 
@@ -147,9 +148,13 @@ if (isset($_POST["search"])) {
             <p class="likes">55 likes</p>
 
             <?php
+
+
+
+
             //--------------- SELECT COMMENTS (inside loop because $photos_id changes) --------------- \\
             //pdo prepare sql string to select comments from photos table where photo_id in comments table == photos_id in photos table AND comment is not 'deleted'
-            $stmtFetchComments = $pdo->prepare("SELECT comment_id, comment FROM comments WHERE photo_id = :photos_id AND deleted != 1");
+            $stmtFetchComments = $pdo->prepare("SELECT comment_id, comment, user_id FROM comments WHERE photo_id = :photos_id AND deleted != 1");
 
             //bind photos_id to :photos_id
             $stmtFetchComments->bindValue('photos_id', $photos_id);
@@ -160,12 +165,26 @@ if (isset($_POST["search"])) {
             //Repeat for each row
             while ($rowComments = $stmtFetchComments->fetch()) {
               $commentId = $rowComments["comment_id"];
-            ?>
+              $users_id = $rowComments["user_id"];
+
+              $stmtFetchUsername = $pdo->prepare("SELECT username FROM users WHERE user_id = :userid");
+
+              // bind user_id to : user_id
+              $stmtFetchUsername->bindValue('userid', $users_id);
+              
+              // run sql
+              $stmtFetchUsername->execute();
+
+              while ($rowUsers = $stmtFetchUsername->fetch()) {
+                $username = $rowUsers["username"];
+              }
+
+              ?>
 
               <div id="<?= $commentId ?>">
 
                 <p class="description">
-                  <span>Användarnamn</span>
+                  <span><?= $username ?></span>
                   <!-- shorthand for php echo comment-->
                   <?= $rowComments["comment"]; ?>
                 </p>
@@ -180,14 +199,16 @@ if (isset($_POST["search"])) {
 
 
             <?php
-            }
-            ?>
+
+          }
+          ?>
           </div>
 
 
           <div class="comment-wrapper">
             <form method="POST" id="commentForm">
               <input type="hidden" name="photos_id" value="<?= $photos_id ?>">
+              <input type="hidden" name="user_id" value="<?= $user_id ?>">
               <input type="text" class="comment-box" name="comment_section" placeholder="Lägg till kommentar" />
               <button name="submit_comment" type="submit" class="comment-btn">Post</button>
             </form>
@@ -197,8 +218,9 @@ if (isset($_POST["search"])) {
     </div>
 
   <?php
-      }
-  ?>
+
+}
+?>
   </div>
 
 
