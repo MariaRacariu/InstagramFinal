@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jan 17, 2022 at 05:40 PM
--- Server version: 5.7.24
--- PHP Version: 8.0.1
+-- Host: 127.0.0.1
+-- Generation Time: May 03, 2022 at 02:20 PM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,7 +32,7 @@ CREATE TABLE `comments` (
   `user_id` int(11) DEFAULT NULL,
   `photo_id` int(11) DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0'
+  `deleted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -85,18 +85,9 @@ CREATE TABLE `photos` (
   `photos_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `caption` varchar(255) DEFAULT NULL,
-  `URL` varchar(255) DEFAULT NULL
+  `URL` varchar(255) DEFAULT NULL,
+  `photos_time` datetime(6) NOT NULL DEFAULT current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `photos`
---
-
-INSERT INTO `photos` (`photos_id`, `user_id`, `caption`, `URL`) VALUES
-(1, 4, 'Hanging with the team! Gonna steal millions of dollars of cookies. LOL', 'img/randon-foto.jpg'),
-(3, 3, 'Speend 150 hours making bubbles', 'img/randon-foto1.jpg'),
-(4, 3, 'Took this picture with my foot. OMG', 'img/randon-foto3.jpg'),
-(5, 3, 'Been studying CSS. Finally made a circle', 'img/randon-foto5.jpg');
 
 -- --------------------------------------------------------
 
