@@ -1,7 +1,6 @@
 <?php
 include "comments.php";
 require "dbh.php";
-// include "search.php";
 
 session_start();
 $user_id = $_SESSION['user_id'];
@@ -48,51 +47,29 @@ if (isset($_POST["search"])) {
 
 
 <body>
-  <nav class="navbar">
-
-
+<nav class="navbar">
     <div class="nav-wrapper" class="dropdown">
-      <a href="index.php"><img src="img/instagram-logga.png" class="insta-img" alt=""></a>
-
-      <!-- Search -->
-      <form class="search" method="post" action="index.php">
-        <input type="text" placeholder="search" name="search" required>
-        <input type="submit" value="Search"> <!-- Removed useless class and changed value to Search. -->
-      </form>
-
-
-      <div class="navigering-items">
-
-
-        <div class="ikon">
-          <a class="utan" href="upload.php"><i class="far fa-plus-square"></i></a>
+        <a href="index.php"><img src="img/instagram-logga.png" class="insta-img" alt=""></a>
+        <div class="navigering-items">
+            <div class="ikon">
+                <a class="utan" href="upload.php"><i class="far fa-plus-square"></i></a>
+            </div>
+            <div class="dropdown">
+                <div class="dropbtn">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="dropdown-content">
+                    <a href="Signin.php"><div class="ikon"><i class="fas fa-user-circle"></i></div>Log out</a>
+                    <div class="ikon">
+                        <div>
+                            <a class="utan" href="followers.php"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Add Friends</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
-        <div class="dropdown">
-
-          <div class="dropbtn">
-            <i class="fas fa-user-circle"></i>
-          </div>
-
-
-          <div class="dropdown-content">
-            <a href="Signin.php">
-              <div class="ikon"><i class="fas fa-user-circle"></i></div>Logga ut
-            </a>
-          </div>
-
-
-        </div>
-
-        
-      </div>
-
-
     </div>
-
-
-  </nav>
+</nav>
 
 
   <section class="main">
@@ -184,7 +161,7 @@ if (isset($_POST["search"])) {
               <div id="<?= $commentId ?>">
 
                 <p class="description">
-                  <span><?= $username ?></span>
+                  <span><?= $username; ?></span>
                   <!-- shorthand for php echo comment-->
                   <?= $rowComments["comment"]; ?>
                 </p>
@@ -209,7 +186,7 @@ if (isset($_POST["search"])) {
             <form method="POST" id="commentForm">
               <input type="hidden" name="photos_id" value="<?= $photos_id ?>">
               <input type="hidden" name="user_id" value="<?= $user_id ?>">
-              <input type="text" class="comment-box" name="comment_section" placeholder="Lägg till kommentar" />
+              <input type="text" class="comment-box" name="comment_section" placeholder="Lägg till kommentar" autocomplete="off"/>
               <button name="submit_comment" type="submit" class="comment-btn">Post</button>
             </form>
           </div>

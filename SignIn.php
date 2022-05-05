@@ -1,33 +1,33 @@
 <?php
 require 'dbh.php'; //require connection script
 
-if(isset($_POST['submit'])){  
+if (isset($_POST['submit'])) {
     $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
     $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $username = !empty($_POST['username']) ? trim($_POST['username']) : null;
     $passwordAttempt = !empty($_POST['password']) ? trim($_POST['password']) : null;
-    
+
     $sql = "SELECT user_id, username, password FROM users WHERE username = :username";
     $stmt = $pdo->prepare($sql);
-    
+
     $stmt->bindValue(':username', $username);
-    
+
     $stmt->execute();
-    
+
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if($user === false){
+
+    if ($user === false) {
         echo '<script>alert("invalid username or password")</script>';
-    } else{
+    } else {
         $validPassword = password_verify($passwordAttempt, $user['password']);
-        if($validPassword){
+        if ($validPassword) {
             session_start();
             $_SESSION['users'] = $username;
             $_SESSION['user_id'] = $user['user_id'];
             echo '<script>window.location.replace("index.php");</script>';
             exit;
-        } else{
+        } else {
             //$validPassword was FALSE. Passwords do not match.
             echo '<script>alert("invalid username or password")</script>';
         }
