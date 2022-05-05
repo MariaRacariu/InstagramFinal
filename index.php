@@ -14,18 +14,6 @@ $stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL, caption, user_id FROM p
 //run sql string after prepare
 $stmtFetchPhotos->execute();
 
-
-if (isset($_POST["search"])) {
-  require "search.php"; //renamed 2-search to search.
-  if (count($results) > 0) {
-    foreach ($results as $r) {
-      printf("<div> %s </div>", $r["username"]);
-    }
-  } else {
-    echo "No results found";
-  }
-}
-
 ?>
 
 <!DOCTYPE html>

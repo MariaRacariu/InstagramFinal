@@ -1,5 +1,15 @@
 <?php 
+require "dbh.php";
 
+$dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
+$dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//--------------- SELECT Users --------------- \\
+//pdo prepare sql string to select users from users table
+$stmtFetchUsers = $pdo->prepare("SELECT username FROM users");
+
+//run sql string after prepare
+$stmtFetchUsers->execute();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +50,17 @@
             </div>
         </div>
     </div>
-</nav>  
+</nav>
+<?php
+
+while ($rowUsers = $stmtFetchUsers->fetch()) {
+        $username = $rowUsers['username'];
+        ?>
+        <section class="main">
+            <div>
+                <p><?= $username; ?></p><br>
+            </div>
+        </section>
+<?php }?>
 </body>
 </html>
