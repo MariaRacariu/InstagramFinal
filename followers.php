@@ -51,16 +51,20 @@ $stmtFetchUsers->execute();
         </div>
     </div>
 </nav>
-<?php
 
+<section class="main">
+<?php
 while ($rowUsers = $stmtFetchUsers->fetch()) {
-        $username = $rowUsers['username'];
-        ?>
-        <section class="main">
-            <div>
-                <p><?= $username; ?></p><br>
-            </div>
-        </section>
-<?php }?>
+    $username = $rowUsers['username'];
+    ?>
+    <div class="wrapper">
+        <div class="post">
+        <p><?= $username; ?></p>
+        <button type="button">Follow</button>
+        </div>
+    </div>
+<?php 
+} ?>
+</section>
 </body>
 </html>
