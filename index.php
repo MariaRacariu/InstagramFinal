@@ -4,13 +4,17 @@ require "dbh.php";
 
 session_start();
 $user_id = $_SESSION['user_id'];
+$username = $_SESSION['users'];
 
 $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
 $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //--------------- SELECT PHOTOS --------------- \\
 //pdo prepare sql string to select images from photos table
-$stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL, caption, user_id FROM photos ORDER BY photos_time DESC");
+$stmtFetchPhotos = $pdo->prepare('SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id
+INNER JOIN followers ON users.user_id = followers.following_id WHERE followers.follower_id = :follower_id
+ORDER BY photos_time DESC');
+$stmtFetchPhotos->bindValue('follower_id', $user_id);
 //run sql string after prepare
 $stmtFetchPhotos->execute();
 
@@ -33,7 +37,6 @@ $stmtFetchPhotos->execute();
   <title>Instagräm</title>
 </head>
 
-
 <body>
 <nav class="navbar">
     <div class="nav-wrapper" class="dropdown">
@@ -50,7 +53,7 @@ $stmtFetchPhotos->execute();
                     <a href="Signin.php"><div class="ikon"><i class="fas fa-user-circle"></i></div>Log out</a>
                     <div class="ikon">
                         <div>
-                            <a class="utan" href="followers.php"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Add Friends</a>
+                            <a class="utan" href="profile.php"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Add Friends</a>
                         </div>
                     </div>
                 </div>
@@ -60,11 +63,26 @@ $stmtFetchPhotos->execute();
 </nav>
 
 
+
   <section class="main">
 
 
     <div class="wrapper">
+    <div>
+      <?php
 
+    $getUsers = $pdo->prepare("SELECT user_id, username FROM users WHERE NOT username ='$username'");
+    $getUsers->execute();
+
+    $results = $getUsers->fetchAll(PDO::FETCH_CLASS);
+
+    echo '<ul>';
+    foreach ($results as $users) {
+        echo '<li><a href="./profile.php?user_id=' . $users->user_id . '">' . ($users->username) . '</a></li>';
+    }
+    echo  '</ul>';
+?>
+      </div>
       <?php
       //Repeat for each row found from sql above
       while ($rowPhotos = $stmtFetchPhotos->fetch()) {
