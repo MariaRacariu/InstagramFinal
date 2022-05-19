@@ -10,11 +10,17 @@ $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
 $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //--------------- SELECT PHOTOS --------------- \\
-//pdo prepare sql string to select images from photos table
-$stmtFetchPhotos = $pdo->prepare('SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id
-INNER JOIN followers ON users.user_id = followers.following_id WHERE followers.follower_id = :follower_id
-ORDER BY photos_time DESC');
-$stmtFetchPhotos->bindValue('follower_id', $user_id);
+// pdo prepare sql string to select images from photos table
+
+$stmtFetchPhotos = $pdo->prepare("SELECT photos_id, URL, caption, user_id FROM photos ORDER BY photos_time DESC");
+
+// This statement does not do anything, what is the purpose?
+// $stmtFetchPhotos = $pdo->prepare('SELECT * FROM users INNER JOIN photos ON users.user_id = photos.user_id
+// INNER JOIN followers ON users.user_id = followers.following_id WHERE followers.follower_id = :follower_id
+// ORDER BY photos_time DESC');
+
+// $stmtFetchPhotos->bindValue('follower_id', $user_id);
+
 //run sql string after prepare
 $stmtFetchPhotos->execute();
 
@@ -68,20 +74,24 @@ $stmtFetchPhotos->execute();
 
 
     <div class="wrapper">
-    <div>
-      <?php
+    <!-- Should this not be in profile.php? -->
+      <div>
+        <?php
 
-    $getUsers = $pdo->prepare("SELECT user_id, username FROM users WHERE NOT username ='$username'");
-    $getUsers->execute();
+        $getUsers = $pdo->prepare("SELECT user_id, username FROM users WHERE NOT username = :username");
+        // username ='$username' changed to bound value bellow
+        $getUsers->bindValue('username', $username);
 
-    $results = $getUsers->fetchAll(PDO::FETCH_CLASS);
+        $getUsers->execute();
 
-    echo '<ul>';
-    foreach ($results as $users) {
-        echo '<li><a href="./profile.php?user_id=' . $users->user_id . '">' . ($users->username) . '</a></li>';
-    }
-    echo  '</ul>';
-?>
+        $results = $getUsers->fetchAll(PDO::FETCH_CLASS);
+
+        echo '<ul>';
+        foreach ($results as $users) {
+          echo '<li><a href="./profile.php?user_id=' . $users->user_id . '">' . ($users->username) . '</a></li>';
+        }
+        echo '</ul>';
+        ?>
       </div>
       <?php
       //Repeat for each row found from sql above
