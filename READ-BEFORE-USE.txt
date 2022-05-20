@@ -1,0 +1,4 @@
+Inport the sql file to set up database in phpmyadmin
+When on website remeber to log in before using other wise website won't work
+If you have a new account you need to follow some people to view their posts
+Small issue when following, you need to refresh page after you follow someone otherwise the follow button won't update
