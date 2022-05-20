@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db = 'instagramdatabase';
+$db = 'instagramDb';
 $user = 'root';
 $password = '';
 $dsn = '';
