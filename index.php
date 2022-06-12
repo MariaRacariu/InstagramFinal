@@ -71,17 +71,17 @@ $stmtFetchPhotos->execute();
     <div>
       <?php
 
-    $getUsers = $pdo->prepare("SELECT user_id, username FROM users WHERE NOT username ='$username'");
-    $getUsers->execute();
+      $getUsers = $pdo->prepare("SELECT user_id, username FROM users WHERE NOT username ='$username'");
+      $getUsers->execute();
 
-    $results = $getUsers->fetchAll(PDO::FETCH_CLASS);
+      $results = $getUsers->fetchAll(PDO::FETCH_CLASS);
 
-    echo '<ul>';
-    foreach ($results as $users) {
+      echo '<ul>';
+      foreach ($results as $users) {
         echo '<li><a href="./profile.php?user_id=' . $users->user_id . '">' . ($users->username) . '</a></li>';
-    }
-    echo  '</ul>';
-?>
+      }
+      echo '</ul>';
+      ?>
       </div>
       <?php
       //Repeat for each row found from sql above
@@ -171,13 +171,16 @@ $stmtFetchPhotos->execute();
                   <!-- shorthand for php echo comment-->
                   <?= $rowComments["comment"]; ?>
                 </p>
-
-                <form method="POST" id="deleteCommentForm">
+                <?php if ($user_id !== $userid) {
+                  ?>
+                  <form method="POST" id="deleteCommentForm">
                   <input type="hidden" name="commentId" value="<?= $commentId ?>">
                   <!-- data-comment-id is for external javascript -->
                   <button name="deleteButton" class="deleteButton" data-comment-id="<?= $commentId ?>">Delete</button>
-                </form>
+                  </form>
+                  <?php
 
+                } ?>
               </div>
 
 
