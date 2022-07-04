@@ -1,6 +1,9 @@
 <?php
 require 'dbh.php'; //require connection script
 
+session_start();
+session_destroy();
+
 if (isset($_POST['submit'])) {
     $dsn = new PDO("mysql:host=$host;dbname=$db", $user, $password);
     $dsn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

@@ -1,22 +1,14 @@
 <?php 
+session_start();
+
 include 'dbh.php';
 require_once 'file_upload.php';
-
-session_start();
-$userId = $_SESSION['user_id']; 
+require "checksLogin.php";
 
 
-// maria: this will never work as this code runs when the page is loaded, add img tag in html and send values back through file_upload.php
-// $stmt = $pdo->prepare('SELECT * FROM photos WHERE user_id = :user_id');
-// $stmt->bindValue('user_id', $userId);
-// $stmt->execute();
+checkLogin();
 
-// $results = $stmt->fetchAll(PDO::FETCH_CLASS);
-
-// foreach ($results as $photos){
-//     echo "<img class='picsInstaFeed' width='280' height='280' src='".$photos->URL."'>";
-//     echo "<p>$photos->caption</p>";
-// }
+$userId = $_SESSION['user_id'];
 ?>
 
 <!DOCTYPE html>
