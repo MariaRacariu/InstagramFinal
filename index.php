@@ -99,7 +99,7 @@ $stmtFetchPhotos->execute();
 
 
               <div class="profile-pic">
-                <img src="img/p1.jpg" alt="" />
+                <img src="img/blank-profile.png" alt="" />
               </div>
 
 
@@ -171,7 +171,7 @@ $stmtFetchPhotos->execute();
                   <!-- shorthand for php echo comment-->
                   <?= $rowComments["comment"]; ?>
                 </p>
-                <?php if ($user_id !== $userid) {
+                <?php if ($user_id == $users_id) {
                   ?>
                   <form method="POST" id="deleteCommentForm">
                   <input type="hidden" name="commentId" value="<?= $commentId ?>">
