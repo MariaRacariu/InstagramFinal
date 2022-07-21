@@ -28,13 +28,15 @@ $stmtFetchPhotos->bindValue('user_id', $currentProfile);
 
 $stmtFetchPhotos->execute();
 
-$stmtCheckFollow = $pdo->prepare("SELECT * FROM followers WHERE follower_id = $user_id AND following_id = $_GET[user_id]");
+//Something is wrong here. Maybe the GET. user_id had no bindValue
+$stmtCheckFollow = $pdo->prepare("SELECT * FROM followers WHERE follower_id = :user_id AND following_id = $_GET[user_id]");
+$stmtCheckFollow->bindValue('user_id', $user_id);
 $stmtCheckFollow->execute();
+
 $followCheck = $stmtCheckFollow->fetch();
 
 if (isset($_POST['follow'])) {
-
-    $stmt = $pdo->prepare("INSERT INTO followers (follower_id, following_id) VALUES (:follower_id, :following_id)");
+    $stmt = $pdo->prepare(" INSERT INTO followers (follower_id, following_id) VALUES(: follower_id, : following_id) ");
     $stmt->bindValue('follower_id', $user_id);
     $stmt->bindValue('following_id', $_GET['user_id']);
     $stmt->execute();
@@ -42,7 +44,7 @@ if (isset($_POST['follow'])) {
 
 if (isset($_POST['unfollow'])) {
 
-    $stmt = $pdo->prepare("DELETE FROM followers WHERE follower_id = $user_id AND following_id = $_GET[user_id]");
+    $stmt = $pdo->prepare(" DELETE FROM followers WHERE follower_id = $user_id and following_id = $_GET [user_id] ");
     $stmt->execute();
 }
 ?> 
